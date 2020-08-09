@@ -40,7 +40,7 @@
   owl:imports dcterms: ;
   owl:imports geo: ;
   owl:versionIRI <https://w3id.org/dggs/as/0.1> ;
-  skos:definition "An ontology describing the parts of a Discreet Global Grid system, in generic (abstract) terms."@en ;
+  skos:definition "An ontology describing the parts of a Discreet Global Grid System in Semantic Web terms, derived from the OGC's DGGS Abstract Specification."@en ;
   skos:prefLabel "Discrete Global Grid Abstract Specification Ontology"@en ;
 .
 dgas:Cell

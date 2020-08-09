@@ -1,6 +1,6 @@
 # DGGS Abstract Specification Ontology
 
-This ontology describes elements of the discrete Global Grid System (DGGS) Abstract Specification in Semantic Web terms. 
+An ontology describing the parts of a Discreet Global Grid System in Semantic Web terms, derived from the OGC's DGGS Abstract Specification. 
 
 This ontology is expected to be used for the publication of DGGS datasets. The ontology contains a `Grid` class of object which an implementing dataset will need to define multiple instances of. Each `Grid` must contain `Cell` instances which are a specialised form of the [GeoSPARQL ontology](https://www.ogc.org/standards/geosparql) 's `Feature` class. The geometries of the `Cell` instances are GeoSPARQL `Geometry` instances with the geometry areas described in DGGS terms which, becuase of the way DGGS' work, are literal values matching those of the `Cell` identifiers. The `Geometry` instances are also created using URIs, not Blank Nodes, as is often the case with GeoSPARQL data, so the Geometry instances can be referenced independently from the `Cell` s. This is so the geometries can be reused in multiple datasets.
 
