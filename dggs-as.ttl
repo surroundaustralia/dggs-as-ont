@@ -1,0 +1,177 @@
+# baseURI: https://w3id.org/dggs/as
+# imports: http://purl.org/dc/terms/
+# imports: http://www.opengis.net/ont/geosparql#
+
+@prefix : <https://w3id.org/dggs/as> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dgas: <https://w3id.org/dggs/as/> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix geox: <http://linked.data.gov.au/def/geox#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sdo: <http://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://orcid.org/0000-0002-8742-7730>
+  a sdo:Person ;
+  a owl:NamedIndividual ;
+  sdo:affiliation <https://surroundaustralia.com> ;
+  sdo:email <mailto:nicholas.car@surroundaustralia.com> ;
+  sdo:honorificPrefix "Dr" ;
+  sdo:jobTitle "Data Systems Architect" ;
+  sdo:name "Nicholas J. Car" ;
+.
+<https://surroundaustralia.com>
+  a sdo:Organization ;
+  a owl:NamedIndividual ;
+  sdo:memberOf <https://www.ogc.org> ;
+  sdo:name "SURROUND Australia Pty Ltd" ;
+  sdo:url <https://surroundaustralia.com> ;
+.
+<https://w3id.org/dggs/as>
+  a owl:Ontology ;
+  dcterms:created "2020-08-09"^^xsd:date ;
+  dcterms:creator <https://orcid.org/0000-0002-8742-7730> ;
+  dcterms:modified "2020-08-09"^^xsd:date ;
+  dcterms:publisher <https://surroundaustralia.com> ;
+  sdo:codeRepository <https://github.com/surround/dggs-as> ;
+  owl:imports dcterms: ;
+  owl:imports geo: ;
+  owl:versionIRI <https://w3id.org/dggs/as/0.1> ;
+  skos:definition "An ontology describing the parts of a Discreet Global Grid system, in generic (abstract) terms."@en ;
+  skos:prefLabel "Discrete Global Grid Abstract Specification Ontology"@en ;
+.
+dgas:Cell
+  a owl:Class ;
+  dcterms:provenance "This class definition is derived from the Topic 21: Discrete Global Grid Systems Abstract Specification, Term Definition 4.14 DGGS cell but uses terminology consistemt with this ontology's other elements and general ontological formalisms." ;
+  dcterms:source <http://www.opengis.net/doc/AS/dggs/1.0> ;
+  rdfs:subClassOf geo:Feature ;
+  rdfs:subClassOf [
+      a owl:Restriction ;
+      owl:allValuesFrom dgas:Grid ;
+      owl:onProperty dcterms:isPartOf ;
+    ] ;
+  rdfs:subClassOf [
+      a owl:Restriction ;
+      owl:cardinality "1"^^xsd:int ;
+      owl:onProperty dgas:hasNeighbourLeft ;
+    ] ;
+  rdfs:subClassOf [
+      a owl:Restriction ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty dgas:hasNeighbourDown ;
+    ] ;
+  rdfs:subClassOf [
+      a owl:Restriction ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty dgas:hasNeighbourRight ;
+    ] ;
+  rdfs:subClassOf [
+      a owl:Restriction ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty dgas:hasNeighbourUp ;
+    ] ;
+  rdfs:subClassOf [
+      a owl:Restriction ;
+      owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty geo:hasGeometry ;
+      skos:scopeNote "A Cell must have a Geometry defined within the DGGS that defines the Cell. It may also have other Geometries, for example, a Geometry in another coordinate reference systems, such as WGS84." ;
+    ] ;
+  skos:altLabel "DGGS Cell" ;
+  skos:definition "A Cell is a *Feature* that has a geometry that is the same in shape and area as all the others in the same *Grid*" ;
+  skos:example """# Example showing some GeoSPARQL relationships between Cells
+tb16pix:R222 a dgas:Cell ;
+	skos:prefLabel \"Cell R222\" ;
+	geo:sfWithin tb16pix:R22 ;    
+	geo:sfContains 
+  		tb16pix:R2220 , 
+  		tb16pix:R2221 , 
+  		tb16pix:R2222 , 
+  		tb16pix:R2223 , 
+  		tb16pix:R2224 , 
+  		tb16pix:R2225 , 
+  		tb16pix:R2226 , 
+  		tb16pix:R2227 , 
+  		tb16pix:R2228 ; 
+.""" ;
+  skos:example """# example showing a Cell's Geometry and indicating the Geometry's conformance to a DGGS dataset
+tb16pix:R222 a dgas:Cell ;
+  skos:prefLabel \"Cell R222\" ;
+  geo:hasGeometry [
+    dcterms:conformsTo <https://w3id.org/dggs/tb16pix> ;
+  	geox:asDGGS \"R232\"^^geo:dggsLiteral ;
+  ] ;
+.""" ;
+  skos:example """# example showing fundamental Cell properties
+tb16pix:R222 a dgas:Cell ;
+  skos:prefLabel \"Cell R222\" ;
+  dgas:hasNeighbourUp tb16pix:N666 ;
+  dgas:hasNeighbourDown tb16pix:R225 ;
+  dgas:hasNeighbourRight tb16pix:O000 ;
+  dgas:hasNeighbourLeft tb16pix:R221 ;
+  geo:hasGeometry [
+  	geox:asDGGS \"<https://w3id.org/dggs/tb16pix> R232\"^^geo:dggsLiteral ;
+  ] ;
+.""" ;
+  skos:prefLabel "Cell" ;
+  skos:scopeNote "A DGGS cell can be considered a container for storing and retrieving data within a DGGS implementation. A DGGS cell may be considered either as a parent cell or as a child cell of at least one parent. In different DGGS implementations this container may be explicit (i.e. tightly coupled to the data stored on disc) or virtual (i.e. loosely coupled to the data stored on disc through a lookup table or database)." ;
+.
+dgas:Grid
+  a owl:Class ;
+  dcterms:provenance "This class definition is derived from the Topic 21: Discrete Global Grid Systems Abstract Specification, Term Definition 4.36 grid" ;
+  dcterms:source <http://www.opengis.net/doc/AS/dggs/1.0> ;
+  rdfs:subClassOf dcterms:Collection ;
+  rdfs:subClassOf rdf:Seq ;
+  rdfs:subClassOf owl:Thing ;
+  skos:altLabel "DGGS Grid" ;
+  skos:definition "A network of Cells with geometries of equal area and shape that cover the entire Earth" ;
+  skos:example """# a Grid from the TB16Pix DGGS dataset
+tb16pix:Resolution3 
+	a dgas:Grid ;
+	skos:prefLabel \"Resolution 3\" ;
+	skos:altLabel \"Grid with resolution 3\" ;
+	dgas:hasCoarserGrid tb16pix:Resolution2 ;
+	dgas:hasFinerGrid tb16pix:Resolution4 ;
+.""" ;
+  skos:prefLabel "Grid" ;
+.
+dgas:hasNeighbourDown
+  a owl:ObjectProperty ;
+  rdfs:domain dgas:Cell ;
+  rdfs:range dgas:Cell ;
+  rdfs:subPropertyOf geo:sfTouches ;
+  skos:definition "The neighbouring Cell of this Cell, downwards" ;
+  skos:prefLabel "has neighbour downward" ;
+.
+dgas:hasNeighbourLeft
+  a owl:ObjectProperty ;
+  rdfs:domain dgas:Cell ;
+  rdfs:range dgas:Cell ;
+  rdfs:subPropertyOf geo:sfTouches ;
+  skos:definition "The neighbouring Cell of this Cell, to the left" ;
+  skos:prefLabel "has neighbour to the left" ;
+.
+dgas:hasNeighbourRight
+  a owl:ObjectProperty ;
+  rdfs:domain dgas:Cell ;
+  rdfs:range dgas:Cell ;
+  rdfs:subPropertyOf geo:sfTouches ;
+  skos:definition "The neighbouring Cell of this Cell, to the right" ;
+  skos:prefLabel "has neighbour to the right" ;
+.
+dgas:hasNeighbourUp
+  a owl:ObjectProperty ;
+  rdfs:domain dgas:Cell ;
+  rdfs:range dgas:Cell ;
+  rdfs:subPropertyOf geo:sfTouches ;
+  skos:definition "The neighbouring Cell of this Cell, upwards" ;
+  skos:prefLabel "has neighbour upward" ;
+.
+<https://www.ogc.org>
+  a sdo:Organization ;
+  a owl:NamedIndividual ;
+  sdo:name "Open Geospatial Consortium" ;
+  sdo:url <https://www.ogc.org> ;
+.

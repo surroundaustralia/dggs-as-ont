@@ -1,0 +1,93 @@
+# baseURI: https://w3id.org/dggs/as.shapes
+# imports: http://datashapes.org/dash
+# imports: https://w3id.org/dggs/as
+
+@prefix : <https://w3id.org/dggs/as> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcam: <http://purl.org/dc/dcam/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dgas: <https://w3id.org/dggs/as/> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix geox: <http://linked.data.gov.au/def/geox#> .
+@prefix gml: <http://www.opengis.net/ont/gml#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sdo: <http://schema.org/> .
+@prefix sf: <http://www.opengis.net/ont/sf#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://w3id.org/dggs/as.shapes>
+  a owl:Ontology ;
+  owl:imports <http://datashapes.org/dash> ;
+  owl:imports <https://w3id.org/dggs/as> ;
+.
+dgas:Cell
+  a sh:NodeShape ;
+  sh:property dgas:Cell-hasGeometry ;
+  sh:property dgas:Cell-hasNeighbourDown ;
+  sh:property dgas:Cell-hasNeighbourLeft ;
+  sh:property dgas:Cell-hasNeighbourRight ;
+  sh:property dgas:Cell-hasNeighbourUp ;
+  sh:property dgas:Cell-partOf ;
+.
+dgas:Cell-hasGeometry
+  a sh:PropertyShape ;
+  sh:path geo:hasGeometry ;
+  sh:minCount 1 ;
+.
+dgas:Cell-hasNeighbourDown
+  a sh:PropertyShape ;
+  sh:path dgas:hasNeighbourDown ;
+  sh:class dgas:Cell ;
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
+.
+dgas:Cell-hasNeighbourLeft
+  a sh:PropertyShape ;
+  sh:path dgas:hasNeighbourLeft ;
+  sh:class dgas:Cell ;
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
+.
+dgas:Cell-hasNeighbourRight
+  a sh:PropertyShape ;
+  sh:path dgas:hasNeighbourRight ;
+  sh:class dgas:Cell ;
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
+.
+dgas:Cell-hasNeighbourUp
+  a sh:PropertyShape ;
+  sh:path dgas:hasNeighbourUp ;
+  sh:class dgas:Cell ;
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
+.
+dgas:Cell-partOf
+  a sh:PropertyShape ;
+  sh:path dcterms:partOf ;
+  sh:class dgas:Grid ;
+  sh:minCount 1 ;
+.
+dgas:Grid
+  a sh:NodeShape ;
+.
+
+geo:Geometry
+  a sh:NodeShape ;
+  sh:property [
+  	sh:path geox:asDGGS ;
+  	sh:minCount 1 ;
+  	sh:nodeKind sh:Literal ;
+  	sh:message "A GeoSPARQL used within a DGGS context must have at least one geox:asDGGS property indicating a Literal." ;
+  ] ;
+  sh:property [
+  	sh:path dcterms:conformsTo ;
+  	sh:nodeKind sh:IRI ;
+  	sh:message "A GeoSPARQL used within a DGGS context may have a dcterms:conformsTo property and, if it does, that property must indicate a IRI (URI)." ;
+  ]
+.  
