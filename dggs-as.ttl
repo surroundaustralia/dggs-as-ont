@@ -56,22 +56,22 @@ dgas:Cell
   rdfs:subClassOf [
       a owl:Restriction ;
       owl:cardinality "1"^^xsd:int ;
-      owl:onProperty dgas:hasNeighbourLeft ;
+      owl:onProperty dgas:hasCellLeft ;
     ] ;
   rdfs:subClassOf [
       a owl:Restriction ;
       owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty dgas:hasNeighbourDown ;
+      owl:onProperty dgas:hasCellDown ;
     ] ;
   rdfs:subClassOf [
       a owl:Restriction ;
       owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty dgas:hasNeighbourRight ;
+      owl:onProperty dgas:hasCellRight ;
     ] ;
   rdfs:subClassOf [
       a owl:Restriction ;
       owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty dgas:hasNeighbourUp ;
+      owl:onProperty dgas:hasCellUp ;
     ] ;
   rdfs:subClassOf [
       a owl:Restriction ;
@@ -137,37 +137,37 @@ tb16pix:Resolution3
 .""" ;
   skos:prefLabel "Grid" ;
 .
-dgas:hasNeighbourDown
+dgas:hasCellDown
   a owl:ObjectProperty ;
   rdfs:domain dgas:Cell ;
   rdfs:range dgas:Cell ;
   rdfs:subPropertyOf geo:sfTouches ;
   skos:definition "The neighbouring Cell of this Cell, downwards" ;
-  skos:prefLabel "has neighbour downward" ;
+  skos:prefLabel "has Cell downward" ;
 .
-dgas:hasNeighbourLeft
+dgas:hasCellLeft
   a owl:ObjectProperty ;
   rdfs:domain dgas:Cell ;
   rdfs:range dgas:Cell ;
   rdfs:subPropertyOf geo:sfTouches ;
   skos:definition "The neighbouring Cell of this Cell, to the left" ;
-  skos:prefLabel "has neighbour to the left" ;
+  skos:prefLabel "has Cell to the left" ;
 .
-dgas:hasNeighbourRight
+dgas:hasCellRight
   a owl:ObjectProperty ;
   rdfs:domain dgas:Cell ;
   rdfs:range dgas:Cell ;
   rdfs:subPropertyOf geo:sfTouches ;
   skos:definition "The neighbouring Cell of this Cell, to the right" ;
-  skos:prefLabel "has neighbour to the right" ;
+  skos:prefLabel "has Cell to the right" ;
 .
-dgas:hasNeighbourUp
+dgas:hasCellUp
   a owl:ObjectProperty ;
   rdfs:domain dgas:Cell ;
   rdfs:range dgas:Cell ;
   rdfs:subPropertyOf geo:sfTouches ;
   skos:definition "The neighbouring Cell of this Cell, upwards" ;
-  skos:prefLabel "has neighbour upward" ;
+  skos:prefLabel "has Cell upward" ;
 .
 <https://www.ogc.org>
   a sdo:Organization ;
