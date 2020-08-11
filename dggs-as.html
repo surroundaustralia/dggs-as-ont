@@ -330,12 +330,36 @@
                 <th>Example</th>
                 <td>
                     <pre>
-                      # example showing a Cell's Geometry and indicating the Geometry's conformance to a DGGS dataset
+# Example showing use of the Zonal Identifier as a standard Geometry
+tb16pix:R222 a dgas:Cell ;
+    geo:hasGeometry [
+        geox:asDGGS "&lt;https://w3id.org/dggs/tb16pix&gt; R232"^^dggsLiteral ;
+    ] ;
+.
+
+# Example showing use of the Zonal Identifier of the Cell
+tb16pix:R222 a dgas:Cell ;
+    geo:hasZonalIdentifier "&lt;https://w3id.org/dggs/tb16pix&gt; R232"^^dggsLiteral ;
+.
+
+# Example showing a Cell's Geometry and indicating the Geometry's conformance to a DGGS dataset
 tb16pix:R222 a dgas:Cell ;
   skos:prefLabel "Cell R222" ;
   geo:hasGeometry [
     dcterms:conformsTo &lt;https://w3id.org/dggs/tb16pix&gt; ;
-  	geox:asDGGS "R232"^^geo:dggsLiteral ;
+    geox:asDGGS "R232"^^geo:dggsLiteral ;
+  ] ;
+.
+
+# Example showing fundamental Fell Feature relations properties
+tb16pix:R222 a dgas:Cell ;
+  skos:prefLabel \"Cell R222\" ;
+  dgas:hasCellUp tb16pix:N666 ;
+  dgas:hasCellDown tb16pix:R225 ;
+  dgas:hasCellRight tb16pix:O000 ;
+  dgas:hasCellLeft tb16pix:R221 ;
+  geo:hasGeometry [
+      geox:asDGGS "&lt;https://w3id.org/dggs/tb16pix&gt; R232"^^geo:dggsLiteral ;
   ] ;
 .
                     </pre>
@@ -401,13 +425,16 @@ tb16pix:R222 a dgas:Cell ;
                 <th>Example</th>
                 <td>
                     <pre>
-                      # the dataset declaration for the "Testbed 16 Pix" DGGS
+# the dataset declaration for the "Testbed 16 Pix" DGGS
 tb16pix:Resolution3 
-	a dgas:DGGS ;
-	skos:prefLabel "Testbed 16 Pix" ;
-	skos:altLabel "TB16Pix" ;
-	skos:definition "A Discrete Global Grid, based on rHealPix, with all Level 0 Cell corners placed in oceans. The rHealPix Ellipsoid parameters for this dataset are: a=6378137.0, b=6356752.314140356, e=0.0578063088401, f=0.003352810681182, lon_0=-131.25 and the RHEALPixDGGS constructor parameters are: ellipsoid=as above, north_square=0, south_square=0, N_side=3. " ;
-	dcterms:conformsTo &lt;https://w3id.org/dggs/as&gt; ;
+    a dgas:DGGS ;
+    skos:prefLabel "Testbed 16 Pix" ;
+    skos:altLabel "TB16Pix" ;
+    skos:definition "A Discrete Global Grid, based on rHealPix, with all Level 0 Cell corners placed in oceans. 
+                    The rHealPix Ellipsoid parameters for this dataset are: a=6378137.0, b=6356752.314140356, 
+                    e=0.0578063088401, f=0.003352810681182, lon_0=-131.25 and the RHEALPixDGGS constructor 
+                    parameters are: ellipsoid=as above, north_square=0, south_square=0, N_side=3. " ;
+    dcterms:conformsTo &lt;https://w3id.org/dggs/as&gt; ;
 .
                     </pre>
                 </td>
@@ -472,14 +499,14 @@ tb16pix:Resolution3
                 <th>Example</th>
                 <td>
                     <pre>
-                      # a Grid from the TB16Pix DGGS dataset
+# a Grid from the TB16Pix DGGS dataset
 tb16pix:GridR3 
-	a dgas:Grid ;
-	skos:prefLabel "Gid of Resolution 3" ;
-	skos:altLabel "Grid R3" ;
+    a dgas:Grid ;
+    skos:prefLabel "Gid of Resolution 3" ;
+    skos:altLabel "Grid R3" ;
     skos:definition "TB16Pix DGGS Grid with resolution 3 which is the 3rd-order child of the coarsest TB16Pix Grid" ;
-	dgas:hasCoarserGrid tb16pix:GridR2 ;
-	dgas:hasFinerGrid tb16pix:GridR4 ;
+    dgas:hasCoarserGrid tb16pix:GridR2 ;
+    dgas:hasFinerGrid tb16pix:GridR4 ;
 .
                     </pre>
                 </td>
@@ -504,7 +531,7 @@ tb16pix:GridR3
             <tr>
                 <th>Source</th>
                 <td>
-                    <http://www.opengis.net/doc/AS/dggs/2.0>
+                    <a href="http://www.opengis.net/doc/AS/dggs/2.0">http://www.opengis.net/doc/AS/dggs/2.0</a>
                 </td>
             </tr>
             <tr>
@@ -651,6 +678,8 @@ tb16pix:GridR3
     <h2>Named Individuals <span style="float:right; font-size:smaller;"><a href="">&uparrow;</a></span></h2>
     <ul class="hlist">
         <li><a href="#0000-0002-8742-7730">0000-0002-8742-7730</a></li>
+        <li><a href="#surround">https://surroundaustralia.com</a></li>
+        <li><a href="#ogc">https://www.ogc.org</a></li>
     </ul>
     <div class="entity named_individual" id="0000-0002-8742-7730">
         <h3>0000-0002-8742-7730<sup title="named individual" class="sup-ni">ni</sup></h3>
@@ -670,8 +699,8 @@ tb16pix:GridR3
             </dd>
         </table>
     </div>
-    <div class="entity named_individual" id="None">
-        <h3>None<sup title="named individual" class="sup-ni">ni</sup></h3>
+    <div class="entity named_individual" id="surround">
+        <h3>SURROUND Australia Pty Ltd<sup title="named individual" class="sup-ni">ni</sup></h3>
         <table>
             <tr>
                 <th>URI</th>
@@ -688,8 +717,8 @@ tb16pix:GridR3
             </dd>
         </table>
     </div>
-    <div class="entity named_individual" id="None">
-        <h3>None<sup title="named individual" class="sup-ni">ni</sup></h3>
+    <div class="entity named_individual" id="ogc">
+        <h3>OGC<sup title="named individual" class="sup-ni">ni</sup></h3>
         <table>
             <tr>
                 <th>URI</th>
