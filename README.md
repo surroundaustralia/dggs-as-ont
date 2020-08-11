@@ -2,6 +2,11 @@
 
 An ontology describing the parts of a Discreet Global Grid System in Semantic Web terms, derived from the OGC's DGGS Abstract Specification. 
 
+This ontology's official publicaiton location is at its namespace URI:
+
+* <https://w3id.org/dggs/as>
+
+
 ![](dggs-as.png)  
 **Figure 1**: Overview diagram of the classes and properties of this ontology  
 
