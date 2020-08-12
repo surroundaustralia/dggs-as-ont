@@ -1,3 +1,6 @@
 # TopBraid
 .project
 
+# Mac
+.DS_Store
+

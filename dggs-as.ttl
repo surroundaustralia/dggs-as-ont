@@ -5,6 +5,7 @@
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix dgas: <https://w3id.org/dggs/as/> .
+@prefix dggs: <https://w3id.org/dggs/as/> .
 @prefix geo: <http://www.opengis.net/ont/geosparql#> .
 @prefix geox: <http://linked.data.gov.au/def/geox#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -15,8 +16,8 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://orcid.org/0000-0002-8742-7730>
-  a sdo:Person ;
   a owl:NamedIndividual ;
+  a sdo:Person ;
   sdo:affiliation <https://surroundaustralia.com> ;
   sdo:email <mailto:nicholas.car@surroundaustralia.com> ;
   sdo:honorificPrefix "Dr" ;
@@ -24,66 +25,151 @@
   sdo:name "Nicholas J. Car" ;
 .
 <https://surroundaustralia.com>
-  a sdo:Organization ;
   a owl:NamedIndividual ;
+  a sdo:Organization ;
   sdo:memberOf <https://www.ogc.org> ;
   sdo:name "SURROUND Australia Pty Ltd" ;
   sdo:url <https://surroundaustralia.com> ;
 .
+
+dggs:RobertGibb
+  a owl:NamedIndividual ;
+  a sdo:Person ;
+  sdo:affiliation <https://www.landcareresearch.co.nz> ;
+  sdo:email <mailto:Gibbr@landcareresearch.co.nz> ;
+  sdo:jobTitle "InformaticsResearch Associate " ;
+  sdo:name "Robert Gibb" ;
+.
+
+<https://www.landcareresearch.co.nz>
+  a owl:NamedIndividual ;
+  a sdo:GovernmentOrganization ;
+  sdo:memberOf <https://www.ogc.org> ;
+  sdo:name "Manaaki Whenua - Landcare Research" ;
+  sdo:url <https://www.landcareresearch.co.nz> ;
+.
+
 <https://w3id.org/dggs/as>
   a owl:Ontology ;
   dcterms:created "2020-08-09"^^xsd:date ;
   dcterms:creator <https://orcid.org/0000-0002-8742-7730> ;
-  dcterms:modified "2020-08-09"^^xsd:date ;
+  dcterms:contributor dggs:RobertGibb ;
+  dcterms:license <https://www.gnu.org/licenses/quick-guide-gplv3.html> ;
+  dcterms:modified "2020-08-12"^^xsd:date ;
   dcterms:publisher <https://surroundaustralia.com> ;
-  sdo:codeRepository <https://github.com/surround/dggs-as> ;
   owl:imports geo: ;
-  owl:versionIRI <https://w3id.org/dggs/as/0.1> ;
+  owl:versionIRI <https://w3id.org/dggs/as/0.2> ;
   skos:definition "An ontology describing the parts of a Discreet Global Grid System in Semantic Web terms, derived from the OGC's DGGS Abstract Specification."@en ;
   skos:note "Many of the class definition in this ontology are derived from the Abstract Specification Topic 21 - Discrete Global Grid Systems - Part 1 Core Reference system and Operations and Equal Area Earth Reference System, version 2.0. Definitions have been adjusted to match common ontological formalisms and it norder to align with other well known ontologies, such as GeoSPARQL. Where class definitiosn are taken substantially from the DGGS Abstract Specification, a dcterms:source property indicates the AS's URI."@en ;
   skos:prefLabel "Discrete Global Grid Abstract Specification Ontology"@en ;
-  dcterms:license <https://www.gnu.org/licenses/quick-guide-gplv3.html> ;
+  sdo:codeRepository <https://github.com/surround/dggs-as> ;
 .
-dgas:Cell
+dggs:Cell
+  a owl:Class ;
+  dcterms:source "<http://www.opengis.net/doc/AS/dggs/2.0>" ;
+  rdfs:subClassOf geo:Geometry ;
+  rdfs:subClassOf [
+      a owl:Restriction ;
+      owl:onClass dggs:Grid ;
+      owl:onProperty dcterms:isPartOf ;
+      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+    ] ;
+  skos:definition "A particular region of space-time" ;
+  skos:example """# a Cell with its defining geometry - a ZonalIdentifier
+<https://w3id.org/tb16pix/cell/R232>
+    a dggs:Cell ;
+    geo:defaultGeometry \"R232\" ;
+.""" ;
+  skos:example """# a Cell with its defining geometry described in coordinates from its DGGS
+# and indicated as being within a Grid
+<https://w3id.org/tb16pix/cell/R232>
+    a dggs:Cell ;
+    geox:asDGGS \"<https://w3id.org/tb16pix> R232\" ;
+    dcterms:isPartOf <https://w3id.org/tb16pix/grid/G3> ;
+.""" ;
+  skos:prefLabel "Cell" ;
+  skos:scopeNote """A Cell is a DGGS' Zone's defining Geometry. The extent of the geometry is described by the Zonal Identifier literal value of the geometry for the DGGS in which the Geometry is defined. This Zonal Idnetifier is a (set of) coordinates which can only be interpreted into other types of coordiantes, e.g. WGS84, if all the parameters of the DGGS that define it are known, e.g. non DGGS geometries like a WGS84. 
+
+A Cell's coordinates may optionally be described by any number of other DGGS or other geometry literal values.""" ;
+.
+dggs:DGGS
+  a owl:Class ;
+  dcterms:source "<http://www.opengis.net/doc/AS/dggs/2.0>" ;
+  rdfs:subClassOf dcat:Dataset ;
+  rdfs:subClassOf dggs:Datum ;
+  skos:altLabel "DGGS" ;
+  skos:definition "A Discrete Global Grid System is an integrated system of hierarchical Grids comprised of Cells and parameters for positioning the Grids on a globe." ;
+  skos:example """# the dataset declaration for the \"Testbed 16 Pix\" DGGS
+tb16pix:Resolution3 
+	a dggs:DGGS ;
+	skos:prefLabel \"Testbed 16 Pix\" ;
+	skos:altLabel \"TB16Pix\" ;
+	skos:definition \"A Discrete Global Grid, based on rHealPix, with all Level 0 Cell corners placed in oceans. The rHealPix Ellipsoid parameters for this dataset are: a=6378137.0, b=6356752.314140356, e=0.0578063088401, f=0.003352810681182, lon_0=-131.25 and the RHEALPixDGGS constructor parameters are: ellipsoid=as above, north_square=0, south_square=0, N_side=3. \" ;
+	dcterms:conformsTo <https://w3id.org/dggs/as> ;
+.""" ;
+  skos:prefLabel "Discrete Global Grid System" ;
+.
+dggs:Datum
+  a owl:Class ;
+  rdfs:subClassOf owl:Thing ;
+  skos:definition "A Datum is reference frame that realizes the positions of the origin, the scale, and the orientation of a coordinate system" ;
+  skos:prefLabel "Datum" ;
+.
+dggs:Grid
+  a owl:Class ;
+  dcterms:provenance "This class definition is derived from the Topic 21: Discrete Global Grid Systems Abstract Specification, Term Definition 4.36 grid" ;
+  dcterms:source <http://www.opengis.net/doc/AS/dggs/2.0> ;
+  rdfs:subClassOf geo:SpatialObject ;
+  skos:altLabel "DGGS Grid" ;
+  skos:altLabel "global geometry" ;
+  skos:definition "A network of Cells with geometries of equal area and shape that cover the entire Earth" ;
+  skos:example """# a Grid from the TB16Pix DGGS dataset
+tb16pix:GridR3 
+	a dggs:Grid ;
+	skos:prefLabel \"Gid of Resolution 3\" ;
+	skos:altLabel \"Grid R3\" ;
+    skos:definition \"TB16Pix DGGS Grid with resolution 3 which is the 3rd-order child of the coarsest TB16Pix Grid\" ;
+	dggs:hasCoarserGrid tb16pix:GridR2 ;
+	dggs:hasFinerGrid tb16pix:GridR4 ;
+.""" ;
+  skos:prefLabel "Grid" ;
+.
+dggs:Zone
   a owl:Class ;
   dcterms:source <http://www.opengis.net/doc/AS/dggs/2.0> ;
   rdfs:subClassOf geo:Feature ;
   rdfs:subClassOf [
       a owl:Restriction ;
-      owl:allValuesFrom dgas:Grid ;
-      owl:onProperty dcterms:isPartOf ;
-    ] ;
-  rdfs:subClassOf [
-      a owl:Restriction ;
       owl:cardinality "1"^^xsd:int ;
-      owl:onProperty dgas:hasCellLeft ;
+      owl:onProperty dggs:hasZoneLeft ;
     ] ;
   rdfs:subClassOf [
       a owl:Restriction ;
       owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty dgas:hasCellDown ;
+      owl:onProperty dggs:hasZoneDown ;
     ] ;
   rdfs:subClassOf [
       a owl:Restriction ;
       owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty dgas:hasCellRight ;
+      owl:onProperty dggs:hasZoneRight ;
     ] ;
   rdfs:subClassOf [
       a owl:Restriction ;
       owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty dgas:hasCellUp ;
+      owl:onProperty dggs:hasZoneUp ;
     ] ;
   rdfs:subClassOf [
       a owl:Restriction ;
-      owl:minCardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty geo:hasGeometry ;
-      skos:scopeNote "A Cell must have a Geometry defined within the DGGS that defines the Cell. It may also have other Geometries, for example, a Geometry in another coordinate reference systems, such as WGS84." ;
+      owl:onClass dggs:Cell ;
+      owl:onProperty geo:defaultGeometry ;
+      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+      skos:scopeNote "A Zone must have a Geometry defined within the DGGS that defines it - a Cell. It may also have other Geometries, for example, a Geometry in another coordinate reference systems, such as WGS84." ;
     ] ;
-  skos:altLabel "DGGS Cell" ;
-  skos:definition "A Cell is a Feature that has a geometry that is defined by a DGGS" ;
-  skos:example """# Example showing some GeoSPARQL relationships between Cells
-tb16pix:R222 a dgas:Cell ;
-	skos:prefLabel \"Cell R222\" ;
+  skos:altLabel "DGGS Zone" ;
+  skos:definition "A Zone is a Feature that has a geometry that is defined by a DGGS" ;
+  skos:example """# Example showing some GeoSPARQL relationships between Zones in different Grids
+tb16pix:R222 a dggs:Zone ;
+	skos:prefLabel \"Zone R222\" ;
 	geo:sfWithin tb16pix:R22 ;    
 	geo:sfContains 
   		tb16pix:R2220 , 
@@ -96,125 +182,66 @@ tb16pix:R222 a dgas:Cell ;
   		tb16pix:R2227 , 
   		tb16pix:R2228 ; 
 .""" ;
-  skos:example """# Example showing use of the Zonal Identifier as a standard Geometry
-tb16pix:R222 a dgas:Cell ;
+  skos:example """# Example showing the Zone's geometry as a regular GeoSPARQL Geometry
+# This should be atypical - use the ZonalIdentifier default Geometry
+<https://w3id.org/tb16pix/zone/R232>
+    a dggs:Zone ;
 	geo:hasGeometry [
         geox:asDGGS \"<https://w3id.org/dggs/tb16pix> R232\"^^dggsLiteral ;
     ] ;
 .""" ;
-  skos:example """# Example showing use of the Zonal Identifier of the Cell
-tb16pix:R222 a dgas:Cell ;
-	geo:hasZonalIdentifier \"<https://w3id.org/dggs/tb16pix> R232\"^^dggsLiteral ;
-.""" ;
-  skos:example """# example showing a Cell's Geometry and indicating the Geometry's conformance to a DGGS dataset
-tb16pix:R222 a dgas:Cell ;
-  skos:prefLabel \"Cell R222\" ;
-  geo:hasGeometry [
-    dcterms:conformsTo <https://w3id.org/dggs/tb16pix> ;
-  	geox:asDGGS \"R232\"^^geo:dggsLiteral ;
-  ] ;
+  skos:example """# Example showing use of the Zonal Identifier as the Geometry of the Zone
+# This should be how the geometry is typically conveyed
+<https://w3id.org/tb16pix/zone/R232> a dggs:Zone ;
+	geo:defaultGeometry <https://w3id.org/tb16pix/cell/R232> ;
 .""" ;
   skos:example """# example showing fundamental Fell Feature relations properties
-tb16pix:R222 a dgas:Cell ;
-  skos:prefLabel \"Cell R222\" ;
-  dgas:hasCellUp tb16pix:N666 ;
-  dgas:hasCellDown tb16pix:R225 ;
-  dgas:hasCellRight tb16pix:O000 ;
-  dgas:hasCellLeft tb16pix:R221 ;
-  geo:hasGeometry [
-  	geox:asDGGS \"<https://w3id.org/dggs/tb16pix> R232\"^^geo:dggsLiteral ;
-  ] ;
+tb16pix:R222 a dggs:Zone ;
+    skos:prefLabel \"Zone R222\" ;
+    dggs:hasZoneUp tb16pix:N666 ;
+    dggs:hasZoneDown tb16pix:R225 ;
+    dggs:hasZoneRight tb16pix:O000 ;
+    dggs:hasZoneLeft tb16pix:R221 ;
+    geo:defaultGeometry <https://w3id.org/tb16pix/cell/R232> ;
 .""" ;
-  skos:prefLabel "Cell" ;
+  skos:prefLabel "Zone" ;
   skos:scopeNote "A DGGS cell can be considered a container for storing and retrieving data within a DGGS implementation. A DGGS cell may be considered either as a parent cell or as a child cell of at least one parent. In different DGGS implementations this container may be explicit (i.e. tightly coupled to the data stored on disc) or virtual (i.e. loosely coupled to the data stored on disc through a lookup table or database)." ;
 .
-dgas:DGGS
-  a owl:Class ;
-  dcterms:source "<http://www.opengis.net/doc/AS/dggs/2.0>" ;
-  rdfs:subClassOf owl:Thing ;
-  rdfs:subClassOf dcat:Dataset ;
-  rdfs:subClassOf dgas:Datum ;
-  skos:altLabel "DGGS" ;
-  skos:definition "A Discrete Global Grid System is an integrated system of hierarchical Grids comprised of Cells." ;
-  skos:example """# the dataset declaration for the \"Testbed 16 Pix\" DGGS
-tb16pix:Resolution3 
-	a dgas:DGGS ;
-	skos:prefLabel \"Testbed 16 Pix\" ;
-	skos:altLabel \"TB16Pix\" ;
-	skos:definition \"A Discrete Global Grid, based on rHealPix, with all Level 0 Cell corners placed in oceans. The rHealPix Ellipsoid parameters for this dataset are: a=6378137.0, b=6356752.314140356, e=0.0578063088401, f=0.003352810681182, lon_0=-131.25 and the RHEALPixDGGS constructor parameters are: ellipsoid=as above, north_square=0, south_square=0, N_side=3. \" ;
-	dcterms:conformsTo <https://w3id.org/dggs/as> ;
-.""" ;
-  skos:prefLabel "Discrete Global Grid System" ;
-.
-dgas:Datum
-  a owl:Class ;
-  rdfs:subClassOf owl:Thing ;
-  skos:definition "A Datum is reference frame that realizes the positions of the origin, the scale, and the orientation of a coordinate system" ;
-  skos:prefLabel "Datum" ;
-.
-dgas:Grid
-  a owl:Class ;
-  dcterms:provenance "This class definition is derived from the Topic 21: Discrete Global Grid Systems Abstract Specification, Term Definition 4.36 grid" ;
-  dcterms:source <http://www.opengis.net/doc/AS/dggs/2.0> ;
-  rdfs:subClassOf dcterms:Collection ;
-  rdfs:subClassOf rdf:Seq ;
-  rdfs:subClassOf owl:Thing ;
-  skos:altLabel "DGGS Grid" ;
-  skos:definition "A network of Cells with geometries of equal area and shape that cover the entire Earth" ;
-  skos:example """# a Grid from the TB16Pix DGGS dataset
-tb16pix:GridR3 
-	a dgas:Grid ;
-	skos:prefLabel \"Gid of Resolution 3\" ;
-	skos:altLabel \"Grid R3\" ;
-    skos:definition \"TB16Pix DGGS Grid with resolution 3 which is the 3rd-order child of the coarsest TB16Pix Grid\" ;
-	dgas:hasCoarserGrid tb16pix:GridR2 ;
-	dgas:hasFinerGrid tb16pix:GridR4 ;
-.""" ;
-  skos:prefLabel "Grid" ;
-.
-dgas:Zone
-  a owl:Class ;
-  dcterms:source "<http://www.opengis.net/doc/AS/dggs/2.0>" ;
-  rdfs:subClassOf geo:Geometry ;
-  skos:definition "A particular region of space-time" ;
-  skos:prefLabel "Zone" ;
-  skos:scopeNote "A Zone is a DGGS' Cells' Geometry. The extent of the geometry must be described by the Zonal Identifier literal value of the geometry for the DGGS in which the Geometry is defined. It may optionally be described by any number of other DGGS or other geometry literal values." ;
-.
-dgas:hasCellDown
+dggs:hasZoneDown
   a owl:ObjectProperty ;
-  rdfs:domain dgas:Cell ;
-  rdfs:range dgas:Cell ;
+  rdfs:domain dggs:Zone ;
+  rdfs:range dggs:Zone ;
   rdfs:subPropertyOf geo:sfTouches ;
-  skos:definition "The neighbouring Cell of this Cell, downwards" ;
-  skos:prefLabel "has Cell downward" ;
+  skos:definition "The neighbouring Zone of this Zone, downwards" ;
+  skos:prefLabel "has Zone downward" ;
 .
-dgas:hasCellLeft
+dggs:hasZoneLeft
   a owl:ObjectProperty ;
-  rdfs:domain dgas:Cell ;
-  rdfs:range dgas:Cell ;
+  rdfs:domain dggs:Zone ;
+  rdfs:range dggs:Zone ;
   rdfs:subPropertyOf geo:sfTouches ;
-  skos:definition "The neighbouring Cell of this Cell, to the left" ;
-  skos:prefLabel "has Cell to the left" ;
+  skos:definition "The neighbouring Zone of this Zone, to the left" ;
+  skos:prefLabel "has Zone to the left" ;
 .
-dgas:hasCellRight
+dggs:hasZoneRight
   a owl:ObjectProperty ;
-  rdfs:domain dgas:Cell ;
-  rdfs:range dgas:Cell ;
+  rdfs:domain dggs:Zone ;
+  rdfs:range dggs:Zone ;
   rdfs:subPropertyOf geo:sfTouches ;
-  skos:definition "The neighbouring Cell of this Cell, to the right" ;
-  skos:prefLabel "has Cell to the right" ;
+  skos:definition "The neighbouring Zone of this Zone, to the right" ;
+  skos:prefLabel "has Zone to the right" ;
 .
-dgas:hasCellUp
+dggs:hasZoneUp
   a owl:ObjectProperty ;
-  rdfs:domain dgas:Cell ;
-  rdfs:range dgas:Cell ;
+  rdfs:domain dggs:Zone ;
+  rdfs:range dggs:Zone ;
   rdfs:subPropertyOf geo:sfTouches ;
-  skos:definition "The neighbouring Cell of this Cell, upwards" ;
-  skos:prefLabel "has Cell upward" ;
+  skos:definition "The neighbouring Zone of this Zone, upwards" ;
+  skos:prefLabel "has Zone upward" ;
 .
 <https://www.ogc.org>
-  a sdo:Organization ;
   a owl:NamedIndividual ;
+  a sdo:Organization ;
   sdo:name "Open Geospatial Consortium" ;
   sdo:url <https://www.ogc.org> ;
 .
