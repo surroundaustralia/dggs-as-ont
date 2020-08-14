@@ -100,13 +100,26 @@ dggs:DGGS
   skos:altLabel "DGGS" ;
   skos:definition "A Discrete Global Grid System is an integrated system of hierarchical Grids comprised of Cells and parameters for positioning the Grids on a globe." ;
   skos:example """# the dataset declaration for the \"Testbed 16 Pix\" DGGS
-tb16pix:Resolution3 
+<https://w3id.org/dggs/tb16pix>
 	a dggs:DGGS ;
 	skos:prefLabel \"Testbed 16 Pix\" ;
 	skos:altLabel \"TB16Pix\" ;
 	skos:definition \"A Discrete Global Grid, based on rHealPix, with all Level 0 Cell corners placed in oceans. The rHealPix Ellipsoid parameters for this dataset are: a=6378137.0, b=6356752.314140356, e=0.0578063088401, f=0.003352810681182, lon_0=-131.25 and the RHEALPixDGGS constructor parameters are: ellipsoid=as above, north_square=0, south_square=0, N_side=3. \" ;
 	dcterms:conformsTo <https://w3id.org/dggs/as> ;
-.""" ;
+.""" ,
+"""
+# a dummy DGGS dataset, DGGS X served by an OGC API - Features
+eg:dggs-x
+    a dggs:DGGS ;
+    skos:prefLabel \"DGGS X\" ;
+.
+eg:ogcApiX
+    a dcat:DataService ;
+    dcat:servesDataset eg:dggs-x ;
+    dcterms:conformsTo <http://www.opengis.net/spec/ogcapi-features-1/1.0/req/core> ;
+    dcat:endpointURL <http://example.org/dggs-x/api/> ;
+.
+""" ;
   skos:prefLabel "Discrete Global Grid System" ;
 .
 dggs:Datum
@@ -114,6 +127,21 @@ dggs:Datum
   rdfs:subClassOf owl:Thing ;
   skos:definition "A Datum is reference frame that realizes the positions of the origin, the scale, and the orientation of a coordinate system" ;
   skos:prefLabel "Datum" ;
+  skos:example """# instances of the class DGGS are also instances of Datum 
+# since DGGS subClassOf Datum
+<https://w3id.org/dggs/tb16pix>
+  a dggs:DGGS , dggs:Datum ;
+	skos:prefLabel \"Testbed 16 Pix\" ;
+.
+
+# a DGGS geometry literal value showing use of the TB16Pix Datum (Dataset)
+<Feature-X>
+    geo:hasGeometry [
+      a geo:Geometry ;
+      geox:asDGGS \"<https://w3id.org/dggs/tb16pix> R334562\" ;
+    ] ;
+.
+  """ ;
 .
 dggs:Grid
   a owl:Class ;
@@ -195,7 +223,7 @@ tb16pix:R222 a dggs:Zone ;
 <https://w3id.org/tb16pix/zone/R232> a dggs:Zone ;
 	geo:defaultGeometry <https://w3id.org/tb16pix/cell/R232> ;
 .""" ;
-  skos:example """# example showing fundamental Fell Feature relations properties
+  skos:example """# example showing fundamental Cell Feature relations properties
 tb16pix:R222 a dggs:Zone ;
     skos:prefLabel \"Zone R222\" ;
     dggs:hasZoneUp tb16pix:N666 ;

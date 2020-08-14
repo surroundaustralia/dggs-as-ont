@@ -352,6 +352,13 @@ A Cell's coordinates may optionally be described by any number of other DGGS or 
     geo:defaultGeometry "R232" ;
 .
                     </pre>
+                    <pre># a Cell with its defining geometry described in coordinates from its DGGS
+# and indicated as being within a Grid
+&lt;https://w3id.org/tb16pix/cell/R232&gt;
+    a dggs:Cell ;
+    geox:asDGGS "&lt;https://w3id.org/tb16pix&gt; R232" ;
+    dcterms:isPartOf &lt;https://w3id.org/tb16pix/grid/G3&gt; ;                        
+                    </pre>
                 </td>
             </tr>
             <tr>
@@ -392,12 +399,28 @@ A Cell's coordinates may optionally be described by any number of other DGGS or 
                 <td>
                     <pre>
 # the dataset declaration for the "Testbed 16 Pix" DGGS
-tb16pix:Resolution3 
-	a dggs:DGGS ;
-	skos:prefLabel "Testbed 16 Pix" ;
-	skos:altLabel "TB16Pix" ;
-	skos:definition "A Discrete Global Grid, based on rHealPix, with all Level 0 Cell corners placed in oceans. The rHealPix Ellipsoid parameters for this dataset are: a=6378137.0, b=6356752.314140356, e=0.0578063088401, f=0.003352810681182, lon_0=-131.25 and the RHEALPixDGGS constructor parameters are: ellipsoid=as above, north_square=0, south_square=0, N_side=3. " ;
-	dcterms:conformsTo &lt;https://w3id.org/dggs/as&gt; ;
+tb16pix: 
+    a dggs:DGGS ;
+    skos:prefLabel "Testbed 16 Pix" ;
+    skos:altLabel "TB16Pix" ;
+    skos:definition "A Discrete Global Grid, based on rHealPix, with all Level 0 Cell corners placed in oceans. 
+                        The rHealPix Ellipsoid parameters for this dataset are: a=6378137.0, b=6356752.314140356, 
+                        e=0.0578063088401, f=0.003352810681182, lon_0=-131.25 and the RHEALPixDGGS constructor 
+                        parameters are: ellipsoid=as above, north_square=0, south_square=0, N_side=3." ;
+    dcterms:conformsTo &lt;https://w3id.org/dggs/as&gt; ;
+.
+                    </pre>
+                    <pre>
+# a dummy DGGS dataset, DGGS X served by an OGC API - Features
+eg:dggs-x
+    a dggs:DGGS ;
+    skos:prefLabel "DGGS X" ;
+.
+eg:ogcApiX
+    a dcat:DataService ;
+    dcat:servesDataset eg:dggs-x ;
+    dcterms:conformsTo &lt;http://www.opengis.net/spec/ogcapi-features-1/1.0/req/core&gt; ;
+    dcat:endpointURL &lt;http://example.org/dggs-x/api/&gt; ;
 .
                     </pre>
                 </td>
@@ -436,6 +459,27 @@ tb16pix:Resolution3
                     <a href="#DiscreteGlobalGridSystem">dggs:DGGS</a><sup class="sup-c" title="class">c</sup><br/>
                 </td>
             </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre>
+# instances of the class DGGS are also instances of Datum 
+# since DGGS subClassOf Datum
+&lt;https://w3id.org/dggs/tb16pix&gt;
+    a dggs:DGGS , dggs:Datum ;
+    skos:prefLabel "Testbed 16 Pix" ;
+.
+
+# a DGGS geometry literal value showing use of the TB16Pix Datum (Dataset)
+&lt;Feature-X&gt;
+    geo:hasGeometry [
+        a geo:Geometry ;
+        geox:asDGGS "&lt;https://w3id.org/dggs/tb16pix&gt; R334562" ;
+    ] ;
+.
+                    </pre>
+                </td>
+            </tr>            
         </table>
     </div>
     <div class="entity class" id="Grid">
@@ -463,12 +507,13 @@ tb16pix:Resolution3
                     <pre>
 # a Grid from the TB16Pix DGGS dataset
 tb16pix:GridR3 
-	a dggs:Grid ;
-	skos:prefLabel "Gid of Resolution 3" ;
-	skos:altLabel "Grid R3" ;
-	skos:definition "TB16Pix DGGS Grid with resolution 3 which is the 3rd-order child of the coarsest TB16Pix Grid" ;
-	dggs:hasCoarserGrid tb16pix:GridR2 ;
-	dggs:hasFinerGrid tb16pix:GridR4 ;
+    a dggs:Grid ;
+    skos:prefLabel "Gid of Resolution 3" ;
+    skos:altLabel "Grid R3" ;
+    skos:definition "TB16Pix DGGS Grid with resolution 3 which is the 
+                        3rd-order child of the coarsest TB16Pix Grid" ;
+    dggs:hasCoarserGrid tb16pix:GridR2 ;
+    dggs:hasFinerGrid tb16pix:GridR4 ;
 .
                     </pre>
                 </td>
@@ -510,7 +555,7 @@ tb16pix:GridR3
                 <th>Example</th>
                 <td>
                     <pre>
-# example showing fundamental Fell Feature relations properties
+# example showing fundamental Cell Feature relations properties
 tb16pix:R222 a dggs:Zone ;
     skos:prefLabel "Zone R222" ;
     dggs:hasZoneUp tb16pix:N666 ;
@@ -520,6 +565,40 @@ tb16pix:R222 a dggs:Zone ;
     geo:defaultGeometry &lt;https://w3id.org/tb16pix/cell/R232&gt; ;
 .
                     </pre>
+                    <pre>
+# Example showing some GeoSPARQL relationships between Zones in different Grids
+tb16pix:R222 a dggs:Zone ;
+    skos:prefLabel "Zone R222" ;
+    geo:sfWithin tb16pix:R22 ;    
+    geo:sfContains 
+        tb16pix:R2220 , 
+        tb16pix:R2221 , 
+        tb16pix:R2222 , 
+        tb16pix:R2223 , 
+        tb16pix:R2224 , 
+        tb16pix:R2225 , 
+        tb16pix:R2226 , 
+        tb16pix:R2227 , 
+        tb16pix:R2228 ; 
+.
+                    </pre>
+                    <pre>
+# Example showing the Zone's geometry as a regular GeoSPARQL Geometry
+# This should be atypical - use the ZonalIdentifier default Geometry
+&lt;https://w3id.org/tb16pix/zone/R232&gt;
+    a dggs:Zone ;
+    geo:hasGeometry [
+        geox:asDGGS "&lt;https://w3id.org/dggs/tb16pix&gt; R232"^^dggsLiteral ;
+    ] ;
+.                        
+                    </pre>
+                    <pre>
+# Example showing use of the Zonal Identifier as the Geometry of the Zone
+# This should be how the geometry is typically conveyed
+&lt;https://w3id.org/tb16pix/zone/R232&gt; a dggs:Zone ;
+    geo:defaultGeometry &lt;https://w3id.org/tb16pix/cell/R232&gt; ;
+.                        
+                    </pre>                    
                 </td>
             </tr>
             <tr>
