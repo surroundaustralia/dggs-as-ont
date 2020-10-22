@@ -62,7 +62,7 @@ dggs:RobertGibb
   skos:definition "An ontology describing the parts of a Discreet Global Grid System in Semantic Web terms, derived from the OGC's DGGS Abstract Specification."@en ;
   skos:note "Many of the class definition in this ontology are derived from the Abstract Specification Topic 21 - Discrete Global Grid Systems - Part 1 Core Reference system and Operations and Equal Area Earth Reference System, version 2.0. Definitions have been adjusted to match common ontological formalisms and it norder to align with other well known ontologies, such as GeoSPARQL. Where class definitiosn are taken substantially from the DGGS Abstract Specification, a dcterms:source property indicates the AS's URI."@en ;
   skos:prefLabel "Discrete Global Grid Abstract Specification Ontology"@en ;
-  sdo:codeRepository <https://github.com/surround/dggs-as> ;
+  sdo:codeRepository <https://github.com/surroundaustralia/dggs-as-ont> ;
 .
 dggs:Cell
   a owl:Class ;
